@@ -44,19 +44,20 @@ app.use((_: Request, res: Response) => {
   });
 });
 
-// test database
-db.connect().then((client) => {
-  return client
-    .query("SELECT NOW()")
-    .then((res) => {
-      client.release();
-      console.log(res.rows);
-    })
-    .catch((err) => {
-      client.release();
-      console.log(err.stack);
-    });
-});
+// test conection to database
+
+// db.connect().then((client) => {
+//   return client
+//     .query("SELECT NOW()")
+//     .then((res) => {
+//       client.release();
+//       console.log(res.rows);
+//     })
+//     .catch((err) => {
+//       client.release();
+//       console.log(err.stack);
+//     });
+// });
 
 
 
