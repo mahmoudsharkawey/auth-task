@@ -3,9 +3,11 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
 import errorMiddleware from "./middlewares/error.middleware";
+import config from "./config";
+import db from "./database/index";
 
 const app: Application = express();
-const port = 3000;
+const port = config.port || 3000;
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 15 minutes
   limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
@@ -41,6 +43,24 @@ app.use((_: Request, res: Response) => {
       "Ohh you are lost, read the API documentation to find your way back home 😂",
   });
 });
+
+// test database
+db.connect().then((client) => {
+  return client
+    .query("SELECT NOW()")
+    .then((res) => {
+      client.release();
+      console.log(res.rows);
+    })
+    .catch((err) => {
+      client.release();
+      console.log(err.stack);
+    });
+});
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
