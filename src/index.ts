@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
+import errorMiddleware from "./middlewares/error.middleware";
 
 const app: Application = express();
 const port = 3000;
@@ -10,9 +11,8 @@ const limiter = rateLimit({
   limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
   standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-  message: "Too Many Requests From This IP  ",
+  message: "Too Many Requests From This IP",
 });
-
 
 // parse requests
 app.use(express.json());
@@ -23,15 +23,22 @@ app.use(helmet());
 // rate limiting middleware to all requests.
 app.use(limiter);
 
+// app.use("/api", routes);
+
+// add routing for / path
 app.get("/", (req: Request, res: Response) => {
   res.json({
-    message: "Hello World!",
+    message: "Hello World 🌍",
   });
 });
-app.post("/", (req: Request, res: Response) => {
-  res.json({
-    message: "Hello World!",
-    data: req.body,
+
+// error handler middleware
+app.use(errorMiddleware);
+
+app.use((_: Request, res: Response) => {
+  res.status(404).json({
+    message:
+      "Ohh you are lost, read the API documentation to find your way back home 😂",
   });
 });
 

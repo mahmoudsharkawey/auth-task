@@ -9,4 +9,4 @@ describe("Test endpoint response", () => {
     const response = await request.get("/");
     expect(response.status).toBe(200);
   });
-});
+}); 
