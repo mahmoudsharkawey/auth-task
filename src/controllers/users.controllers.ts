@@ -25,7 +25,7 @@ export const create = async (
 };
 
 // Login controller
-export const getOne = async (
+export const getUser = async (
   req: Request,
   res: Response,
   next: NextFunction
