@@ -5,7 +5,7 @@ import { rateLimit } from "express-rate-limit";
 import errorMiddleware from "./middlewares/error.middleware";
 import config from "./config";
 import db from "./database/index";
-
+import routes from "./routes";
 const app: Application = express();
 const port = config.port || 3000;
 const limiter = rateLimit({
@@ -25,7 +25,8 @@ app.use(helmet());
 // rate limiting middleware to all requests.
 app.use(limiter);
 
-// app.use("/api", routes);
+// Routes
+app.use("/api", routes);
 
 // add routing for / path
 app.get("/", (req: Request, res: Response) => {
@@ -58,10 +59,6 @@ app.use((_: Request, res: Response) => {
 //       console.log(err.stack);
 //     });
 // });
-
-
-
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
