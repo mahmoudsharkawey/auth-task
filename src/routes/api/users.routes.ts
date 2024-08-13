@@ -6,5 +6,6 @@ const routes = Router();
 
 routes.route("/register").post(controllers.create);
 routes.route("/login").post(controllers.getOne);
+routes.route("/authenticate").post(controllers.authenticate);
 
 export default routes;

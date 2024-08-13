@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model";
 import config from "../config";
 import bcrypt from "bcrypt";
@@ -65,28 +65,28 @@ export const getOne = async (
   }
 };
 
-// export const authenticate = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     const user = await userModel.authenticate(email, password);
-//     const token = jwt.sign({ user }, config.tokenSecret as unknown as string);
-//     if (!user) {
-//       return res.status(401).json({
-//         status: "error",
-//         message: "the username and password do not match please try again",
-//       });
-//     }
-//     return res.json({
-//       status: "success",
-//       data: { ...user, token },
-//       message: "user authenticated successfully",
-//     });
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
+// authenticate controller
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.authenticate(email, password);
+    const token = jwt.sign({ user }, config.tokenSecret as unknown as string);
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        message: "the email and password do not match please try again",
+      });
+    }
+    return res.json({
+      status: "success",
+      data: { ...user, token },
+      message: "user authenticated successfully",
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
